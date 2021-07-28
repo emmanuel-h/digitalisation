@@ -1,26 +1,17 @@
 // TODO: Find funnier replacements
-// TODO: Find another way te retrieve text node than browse all DOM
 // TODO: Manage case for matching.
 
-getAllTextNodes().forEach(function(node){
+const treeWalker = document.createTreeWalker(
+    document.body,
+    NodeFilter.SHOW_TEXT,
+    { acceptNode: function(node) { return NodeFilter.FILTER_ACCEPT; } }
+);
+let node;
+while (node = treeWalker.nextNode()) {
     node.nodeValue = node.nodeValue.replace(/transformation numérique|transformation digitale|à taille humaine/gi, customReplace);
-});
-
-function getAllTextNodes(){
-    let result = [];
-
-    (function scanSubTree(node){
-        if(node.childNodes.length)
-            for(let i = 0; i < node.childNodes.length; i++)
-                scanSubTree(node.childNodes[i]);
-        else if(node.nodeType === Node.TEXT_NODE)
-            result.push(node);
-    })(document);
-
-    return result;
 }
 
-function customReplace(value){
+function customReplace(value) {
     switch (value) {
         case "transformation numérique":
         case "transformation digitale":
